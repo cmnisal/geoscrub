@@ -203,11 +203,19 @@
                     4. Print As PDF
                 </div>
             </div>
-
         </div>
 
         <div class="container">
             <div class="wrapper-content">
+                <div id="floating-panel">
+                    <div class="filters" style="text-align: right">
+                        Include: 
+                            <input type="checkbox" id="ckCar" name="ckCar" value="IN_PASSENGER_VEHICLE" onclick="loadFile()">In Vehicle
+                            <input type="checkbox" id="ckCycling" name="ckCycling" value="CYCLING" onclick="loadFile()">Cycling
+                            <input type="checkbox" id="ckRun" name="ckRun" value="RUNNING" onclick="loadFile()">Running
+                            <input type="checkbox" id="ckWalk" name="ckWalk" value="WALKING" onclick="loadFile()">Walking
+                    </div>
+                </div>
                 <table role="table" class="table" cellspacing="0" id="table">
                     <thead>
                         <tr role="row">
@@ -363,6 +371,26 @@
             tdMapCanvas.appendChild(tdMapCanvasDiv);
             return tdMapCanvas;
         }
+        
+        function getActiveActivities() {
+            var ckCar = document.getElementById('ckCar');
+            var ckWalk = document.getElementById('ckWalk');
+            var ckRun = document.getElementById('ckRun');
+            var ckCycling = document.getElementById('ckCycling');
+            
+            var activeActivities = ["IN_BUS", "IN_SUBWAY", "IN_FERRY", "IN_TRAIN", "IN_TRAM", "STILL", "SKIING", "FLYING", "SAILING"];
+            
+            if (ckCar.checked) {
+                activeActivities.push(ckCar.value);
+                activeActivities.push("IN_VEHICLE");
+                activeActivities.push("MOTORCYCLING");
+            }
+            if (ckWalk.checked) activeActivities.push(ckWalk.value);
+            if (ckRun.checked) activeActivities.push(ckRun.value);
+            if (ckCycling.checked) activeActivities.push(ckCycling.value);
+            
+            return activeActivities;
+        }
 
         function loadFile() {
             var input, file, fr;
@@ -390,7 +418,10 @@
                 let lines = e.target.result;
                 var newArr = JSON.parse(lines);
 
-                var tableBody = document.getElementById('tbody')
+                var tableBody = document.getElementById('tbody');
+                var activeActivities = getActiveActivities();
+                
+                tableBody.innerHTML = "";
                 var line = 0;
                 newArr.timelineObjects.map((val) => {
                     line++;
@@ -404,8 +435,8 @@
                         tr.appendChild(getLocation(val.placeVisit));
                         tr.appendChild(getAddress(val.placeVisit));
                     }
-                    /*
-                    if (val.activitySegment) {
+                    
+                    if (val.activitySegment && activeActivities.includes(val.activitySegment.activityType)) {
                         var tr = document.createElement('tr');
                         tr.id = "line"+line;
                         tableBody.appendChild(tr);
@@ -414,7 +445,7 @@
                         tr.appendChild(getDateTime(val.activitySegment.duration));
                         tr.appendChild(getActivityType(val.activitySegment));
                         tr.appendChild(getMiniRoute2(val.activitySegment));
-                    }*/
+                    }
                 });
             }
         }
