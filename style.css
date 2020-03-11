@@ -104,6 +104,13 @@ button {
     color: #fff;
 }
 
+td a {
+    text-decoration: none;
+    -webkit-transition: .3s;
+    transition: .3s;
+    color: inherit;
+}
+
 .container {
     width: 100%;
     padding: 0 16px;
@@ -143,6 +150,8 @@ button {
 
 .red {
     color: red;
+    padding-left: 4px;
+    padding-right: 4px;
 }
 
 .map {

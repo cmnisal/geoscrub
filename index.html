@@ -88,18 +88,36 @@
     </div>
 
     <script>
+        function nameClassTr(str) {
+            return 'location' + str.split(" ").join("_").split("&").join("AND");
+        }
+        
+        function nameIdTr(id) {
+            return 'line' + id;
+        }
+        
+        function removeLocation(str) {
+            $('.'+nameClassTr(str)).each(function(i, obj) {
+                obj.style.display = "none";
+            });
+        }
+        
         function removeLine(line) {
-            x = document.getElementById('line' + line);
+            x = document.getElementById(nameIdTr(line));
             x.style.display = "none";
         }
+        
+        function getRemoveButton() {
+            var tdRemove = document.createElement('i'); 
+            tdRemove.classList = "fa fa-remove red";
+            return tdRemove;
+        }
 
-        function getRemoveButton(lineId) {
+        function getRemoveLineButton(lineId) {
             var tdAction = document.createElement('td');
             var tdA = document.createElement('a');
-            var tdRemove = document.createElement('i');
-            tdRemove.classList = "fa fa-remove red";
             tdA.href = "javascript:removeLine(" + lineId + ")";
-            tdA.appendChild(tdRemove);
+            tdA.appendChild(getRemoveButton());
             tdAction.appendChild(tdA);
             return tdAction;
         }
@@ -108,11 +126,7 @@
             return new Date(parseInt(timestamp));
         }
 
-        function parseGeo(longOrLat) {
-            return longOrLat * (10 * * -7);
-        }
-
-        function getDateTime(duration) {
+        function getDateTimeElement(duration) {
             var tdTime = document.createElement('td');
             var dateSt = parseDateTime(duration.startTimestampMs);
             var dateEnd = parseDateTime(duration.endTimestampMs);
@@ -131,16 +145,37 @@
         }
 
         function getLocation(placeVisit) {
-            var tdLocation = document.createElement('td');
             if (placeVisit.childVisits && placeVisit.childVisits[0].location && placeVisit.childVisits[0].location.name !== 'UNDEFINED') {
-                tdLocation.textContent += placeVisit.childVisits[0].location.name;
+                return placeVisit.childVisits[0].location.name;
             } else {
-                tdLocation.textContent = placeVisit.location.name;
+                return placeVisit.location.name;
             }
+        }
+        
+        function getLocationElement(placeVisit, lineNumber) {
+            var tdLocation = document.createElement('td');
+            var tdSpan = document.createElement('span');
+            tdSpan.textContent = getLocation(placeVisit);
+            
+            var tdA = document.createElement('a');
+            tdA.style.visibility = 'hidden';
+            tdA.id = 'removeLocation'+lineNumber;
+            tdA.href = "javascript:removeLocation('" + tdSpan.textContent + "')";
+            tdA.appendChild(getRemoveButton());
+            
+            tdLocation.appendChild(tdSpan);
+            tdLocation.appendChild(tdA);
+            tdLocation.addEventListener("mouseover", function(){
+              tdA.style.visibility='visible';
+            });
+            tdLocation.addEventListener("mouseout",  function(){
+              tdA.style.visibility='hidden';
+            });
+            
             return tdLocation;
         }
 
-        function getAddress(placeVisit) {
+        function getAddressElement(placeVisit) {
             var tdLocation = document.createElement('td');
             if (placeVisit.childVisits && placeVisit.childVisits[0].location && placeVisit.childVisits[0].location.name !== 'UNDEFINED') {
                 tdLocation.textContent += placeVisit.childVisits[0].location.address;
@@ -151,17 +186,38 @@
         }
 
         function getActivityType(activitySegment) {
-            var tdLocation = document.createElement('td');
-            tdLocation.textContent = activitySegment.activityType.split("_").join(" ");
-
+            var actType = activitySegment.activityType.split("_").join(" ");
             if (activitySegment.transitPath) {
-                tdLocation.textContent += " (Route: " + activitySegment.transitPath.name + ")"
+                actType += " (Route: " + activitySegment.transitPath.name + ")"
             }
-
+            return actType;
+        }
+        
+        function getActivityTypeElement(activitySegment, lineNumber) {
+            var tdLocation = document.createElement('td');
+            var tdSpan = document.createElement('span');
+            tdSpan.textContent = getActivityType(activitySegment);
+            
+            var tdA = document.createElement('a');
+            tdA.style.visibility = 'hidden';
+            tdA.id = 'removeLocation'+lineNumber;
+            tdA.href = "javascript:removeLocation('" + tdSpan.textContent + "')";
+            tdA.appendChild(getRemoveButton());
+            
+            tdLocation.appendChild(tdSpan);
+            tdLocation.appendChild(tdA);
+            
+            tdLocation.addEventListener("mouseover", function(){
+              tdA.style.visibility='visible';
+            });
+            tdLocation.addEventListener("mouseout",  function(){
+              tdA.style.visibility='hidden';
+            });
+            
             return tdLocation;
         }
 
-        function getMiniRoute(activitySegment) {
+        function getMiniRouteElement(activitySegment) {
             var tdRoute = document.createElement('td');
             if (activitySegment.transitPath && activitySegment.transitPath.transitStops) {
                 tdRoute.textContent = activitySegment.transitPath.transitStops[0].name + " to " + activitySegment.transitPath.transitStops[1].name;
@@ -226,24 +282,27 @@
                     line++;
                     if (val.placeVisit) {
                         var tr = document.createElement('tr');
-                        tr.id = "line" + line;
+                        tr.id = nameIdTr(line);
+                        tr.className = nameClassTr(getLocation(val.placeVisit));
                         tableBody.appendChild(tr);
 
-                        tr.appendChild(getRemoveButton(line));
-                        tr.appendChild(getDateTime(val.placeVisit.duration));
-                        tr.appendChild(getLocation(val.placeVisit));
-                        tr.appendChild(getAddress(val.placeVisit));
+                        tr.appendChild(getRemoveLineButton(line));
+                        tr.appendChild(getDateTimeElement(val.placeVisit.duration));
+                        tr.appendChild(getLocationElement(val.placeVisit, line));
+                        tr.appendChild(getAddressElement(val.placeVisit));
                     }
 
                     if (val.activitySegment && activeActivities.includes(val.activitySegment.activityType)) {
                         var tr = document.createElement('tr');
-                        tr.id = "line" + line;
+                        tr.id = nameIdTr(line);
+                        tr.className = nameClassTr(getActivityType(val.activitySegment));
+                        
                         tableBody.appendChild(tr);
 
-                        tr.appendChild(getRemoveButton(line));
-                        tr.appendChild(getDateTime(val.activitySegment.duration));
-                        tr.appendChild(getActivityType(val.activitySegment));
-                        tr.appendChild(getMiniRoute(val.activitySegment));
+                        tr.appendChild(getRemoveLineButton(line));
+                        tr.appendChild(getDateTimeElement(val.activitySegment.duration));
+                        tr.appendChild(getActivityTypeElement(val.activitySegment, line));
+                        tr.appendChild(getMiniRouteElement(val.activitySegment));
                     }
                 });
             }
