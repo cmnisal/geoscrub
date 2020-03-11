@@ -172,11 +172,6 @@
             text-align: right;
             vertical-align: middle;
         }
-        
-        .filters_line {
-            margin: 2px;
-            vertical-align: middle;
-        }
     </style>
 
     <script src="https://code.jquery.com/jquery.js"></script>
@@ -226,11 +221,11 @@
             <div class="wrapper-content">
                 <div id="floating-panel">
                     <div class="filters">
-                        <span class="filters_line">Include: </span>
-                            <input type="checkbox" id="ckCar" name="ckCar" value="IN_PASSENGER_VEHICLE" onclick="loadFile()"><span class="filters_line">In Vehicle</span>
-                            <input type="checkbox" id="ckCycling" name="ckCycling" value="CYCLING" onclick="loadFile()"><span class="filters_line">Cycling</span>
-                            <input type="checkbox" id="ckRun" name="ckRun" value="RUNNING" onclick="loadFile()"><span class="filters_line">Running</span>
-                        <input type="checkbox" id="ckWalk" name="ckWalk" value="WALKING" onclick="loadFile()"><span class="filters_line">Walking</span>
+                        Include:
+                            <label><input type="checkbox" id="ckCar" name="ckCar" value="IN_PASSENGER_VEHICLE" onclick="loadFile()">In Vehicle</label>
+                            <label><input type="checkbox" id="ckCycling" name="ckCycling" value="CYCLING" onclick="loadFile()">Cycling</label>
+                            <label><input type="checkbox" id="ckRun" name="ckRun" value="RUNNING" onclick="loadFile()">Running</label>
+                            <label><input type="checkbox" id="ckWalk" name="ckWalk" value="WALKING" onclick="loadFile()">Walking</label>
                     </div>
                 </div>
                 <table role="table" class="table" cellspacing="0" id="table">
