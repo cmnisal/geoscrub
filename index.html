@@ -14,8 +14,6 @@
 
     <script src="https://code.jquery.com/jquery.js"></script>
     
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAnsJiBidtS98aT4H_XcphFEyFeJUeDa3w">
-    </script>
     
     <link rel="stylesheet" href="style.css">
 </head>
@@ -160,67 +158,9 @@
                 tdRoute.textContent = activitySegment.transitPath.transitStops[0].name + " to " 
                                     + activitySegment.transitPath.transitStops[1].name;
             } else {
-                tdRoute.textContent = "";//getLatLong(activitySegment.startLocation) + " to " + getLatLong(activitySegment.endLocation);
+                tdRoute.textContent = "";
             }
             return tdRoute;
-        }
-        
-        function getGoogleLatLong(loc) {
-            return new google.maps.LatLng(loc.latitudeE7 * (10 ** -7), loc.longitudeE7 * (10 ** -7));
-        }
-        
-        var maps = 0;
-        
-        function getMiniRoute(activitySegment) {
-            maps = maps+1;
-            var tdMapCanvas = document.createElement('td');
-            var tdMapCanvasDiv = document.createElement('div');
-            tdMapCanvasDiv.id = "map-canvas" + maps;
-            tdMapCanvasDiv.className = "map";
-            
-            if (activitySegment.waypointPath && activitySegment.waypointPath.waypoints) {
-                var flightPlanCoordinates = [
-                    {lat: activitySegment.startLocation.latitudeE7 * (10 ** -7), 
-                     lng: activitySegment.startLocation.longitudeE7 * (10 ** -7)}
-                    ];
-                
-                for (i = 0; i < activitySegment.waypointPath.waypoints.length; i++) {
-                    flightPlanCoordinates.push(
-                        {lat: activitySegment.waypointPath.waypoints[i].latE7 * (10 ** -7), 
-                         lng: activitySegment.waypointPath.waypoints[i].lngE7 * (10 ** -7)}
-                    );
-                }
-                
-                flightPlanCoordinates.push(
-                    {lat: activitySegment.endLocation.latitudeE7 * (10 ** -7), 
-                     lng: activitySegment.endLocation.longitudeE7 * (10 ** -7)}
-                );
-            } else {
-                var flightPlanCoordinates = [
-                    {lat: activitySegment.startLocation.latitudeE7 * (10 ** -7), lng: activitySegment.startLocation.longitudeE7 * (10 ** -7)},
-                    {lat: activitySegment.endLocation.latitudeE7 * (10 ** -7), lng: activitySegment.endLocation.longitudeE7 * (10 ** -7)},
-                ];
-            }
-            
-            var pointA = getGoogleLatLong(activitySegment.startLocation),
-                pointB = getGoogleLatLong(activitySegment.endLocation),
-                myOptions = {
-                  zoom: 13,
-                  center: pointA,
-                  mapTypeControl: false
-                },
-                map = new google.maps.Map(tdMapCanvasDiv, myOptions), 
-                flightPath = new google.maps.Polyline({
-                    path: flightPlanCoordinates,
-                    geodesic: true,
-                    strokeColor: '#FF0000',
-                    strokeOpacity: 1.0,
-                    strokeWeight: 2,
-                    map: map
-                });
-            
-            tdMapCanvas.appendChild(tdMapCanvasDiv);
-            return tdMapCanvas;
         }
         
         function getActiveActivities() {
