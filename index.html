@@ -158,7 +158,7 @@
             tdSpan.textContent = getLocation(placeVisit);
             
             var tdA = document.createElement('a');
-            tdA.style.visibility = 'hidden';
+            tdA.style.display='none';
             tdA.id = 'removeLocation'+lineNumber;
             tdA.href = "javascript:removeLocation('" + tdSpan.textContent + "')";
             tdA.appendChild(getRemoveButton());
@@ -166,10 +166,10 @@
             tdLocation.appendChild(tdSpan);
             tdLocation.appendChild(tdA);
             tdLocation.addEventListener("mouseover", function(){
-              tdA.style.visibility='visible';
+              tdA.style.display='inline';
             });
             tdLocation.addEventListener("mouseout",  function(){
-              tdA.style.visibility='hidden';
+              tdA.style.display='none';
             });
             
             return tdLocation;
@@ -199,7 +199,7 @@
             tdSpan.textContent = getActivityType(activitySegment);
             
             var tdA = document.createElement('a');
-            tdA.style.visibility = 'hidden';
+            tdA.style.display='none';
             tdA.id = 'removeLocation'+lineNumber;
             tdA.href = "javascript:removeLocation('" + tdSpan.textContent + "')";
             tdA.appendChild(getRemoveButton());
@@ -208,10 +208,10 @@
             tdLocation.appendChild(tdA);
             
             tdLocation.addEventListener("mouseover", function(){
-              tdA.style.visibility='visible';
+              tdA.style.display='inline';
             });
             tdLocation.addEventListener("mouseout",  function(){
-              tdA.style.visibility='hidden';
+              tdA.style.display='none';
             });
             
             return tdLocation;
