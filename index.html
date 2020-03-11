@@ -283,6 +283,11 @@
         function getActivityType(activitySegment) {
             var tdLocation = document.createElement('td');
             tdLocation.textContent = activitySegment.activityType.split("_").join(" ");
+            
+            if (activitySegment.transitPath) {
+                tdLocation.textContent += " (Route: " + activitySegment.transitPath.name + ")"     
+            }
+            
             return tdLocation;
         }
         
@@ -292,7 +297,12 @@
         
         function getMiniRoute2(activitySegment) {
             var tdRoute = document.createElement('td');
-            tdRoute.textContent = "";//getLatLong(activitySegment.startLocation) + " to " + getLatLong(activitySegment.endLocation);
+            if (activitySegment.transitPath && activitySegment.transitPath.transitStops) {
+                tdRoute.textContent = activitySegment.transitPath.transitStops[0].name + " to " 
+                                    + activitySegment.transitPath.transitStops[1].name;
+            } else {
+                tdRoute.textContent = "";//getLatLong(activitySegment.startLocation) + " to " + getLatLong(activitySegment.endLocation);
+            }
             return tdRoute;
         }
         
