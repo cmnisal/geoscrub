@@ -25,7 +25,7 @@
             </div>
         </div>
 
-        <div class="container">
+        <div class="container noprint">
             Allows a user to scrub out unwanted geotags from Google's Location History data and export in PDF
             <br>
             <br>
@@ -56,34 +56,32 @@
         </div>
 
         <div class="container">
-            <div class="wrapper-content">
-                <div id="floating-panel">
-                    <div class="filters">
-                        Include:
-                        <label>
-                            <input type="checkbox" id="ckCar" name="ckCar" value="IN_PASSENGER_VEHICLE" onclick="reloadFile()">In Vehicle</label>
-                        <label>
-                            <input type="checkbox" id="ckCycling" name="ckCycling" value="CYCLING" onclick="reloadFile()">Cycling</label>
-                        <label>
-                            <input type="checkbox" id="ckRun" name="ckRun" value="RUNNING" onclick="reloadFile()">Running</label>
-                        <label>
-                            <input type="checkbox" id="ckWalk" name="ckWalk" value="WALKING" onclick="reloadFile()">Walking</label>
-                    </div>
+            <div id="floating-panel" class="wrapper-content noprint">
+                <div class="filters">
+                    Include:
+                    <label>
+                        <input type="checkbox" id="ckCar" name="ckCar" value="IN_PASSENGER_VEHICLE" onclick="reloadFile()">In Vehicle</label>
+                    <label>
+                        <input type="checkbox" id="ckCycling" name="ckCycling" value="CYCLING" onclick="reloadFile()">Cycling</label>
+                    <label>
+                        <input type="checkbox" id="ckRun" name="ckRun" value="RUNNING" onclick="reloadFile()">Running</label>
+                    <label>
+                        <input type="checkbox" id="ckWalk" name="ckWalk" value="WALKING" onclick="reloadFile()">Walking</label>
                 </div>
-                <table role="table" class="table" cellspacing="0" id="table">
-                    <thead>
-                        <tr role="row">
-                            <th colspan="1" role="columnheader"></th>
-                            <th colspan="1" role="columnheader">Date</th>
-                            <th colspan="1" role="columnheader">Location</th>
-                            <th colspan="1" role="columnheader">Address</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody">
-
-                    </tbody>
-                </table>
             </div>
+            <table role="table" class="table" cellspacing="0" id="table">
+                <thead>
+                    <tr role="row">
+                        <th colspan="1" role="columnheader" class="noprint"></th>
+                        <th colspan="1" role="columnheader">Date</th>
+                        <th colspan="1" role="columnheader">Location</th>
+                        <th colspan="1" role="columnheader">Address</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -149,13 +147,15 @@
             var tdA = document.createElement('a');
             tdA.href = "javascript:removeLine(" + lineId + ")";
             tdA.appendChild(getRemoveButton());
-            tdAction.appendChild(tdA);
             tdA.addEventListener("mouseover", function(){
               showLineToBeRemoved(lineId);
             });
             tdA.addEventListener("mouseout",  function(){
               hideLineToBeRemoved(lineId);
             });
+            
+            tdAction.classList.add("noprint");
+            tdAction.appendChild(tdA);
             return tdAction;
         }
 
