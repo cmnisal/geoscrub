@@ -144,6 +144,35 @@ td a {
     font-weight: 600;
 }
 
+.header_right {
+    display: flex;
+    align-items: center;
+    flex-basis: auto;
+    flex-grow: 1;
+    justify-content: flex-end;
+    padding: 0px;
+}
+
+.header_exit {
+    font-weight: 500;
+    cursor: pointer;
+    -webkit-transition: .3s;
+    transition: .3s;
+    align-items: center;
+    vertical-align: middle;
+}
+
+.header_exit icon {
+    margin-left: 4px;
+}
+
+.header_exit a {
+    text-decoration: none;
+    -webkit-transition: .3s;
+    transition: .3s;
+    color: inherit;
+}
+
 .wrapper-content {
     padding-top: 32px;
 }
